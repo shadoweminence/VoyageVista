@@ -1,66 +1,67 @@
-
-
 import './App.css';
-import Alert from './components/Alert';
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Navbar from "./components/Navbar";
-import Settings from "./components/Settings";
-import Packages from "./components/Packages";
-import AddFeed from "./components/AddFeed";
-import React,{useState} from 'react'
-import{
+import Alert from './components/Layouts/Alert';
+import Login from "./components/Pages/Login";
+import Register from "./components/Pages/Register";
+import Navbar from "./components/Layouts/Navbar";
+import Footer from './components/Layouts/Footer';
+import Settings from "./components/Pages/Settings";
+import Packages from "./components/Pages/Packages";
+import AddFeed from "./components/Pages/AddFeed";
+import React, { useState } from 'react';
+import {
   BrowserRouter as Router,
   Routes,
   Route,
-  // Link
-}from "react-router-dom";
+} from "react-router-dom";
+
 
 function App() {
   const [mode, setMode] = useState("light");
-  const [alert,setAlert] = useState(null);
+  const [alert, setAlert] = useState(null);
 
-  const showAlert = (message, type) =>{
-       setAlert({
-        msg: message,
-       type: type
-       })
-       setTimeout(() => {
-        setAlert(null);
-       }, 1500);
-  }
- 
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
+
   const toggleMode = () => {
     if (mode === "light") {
       setMode("dark");
-      document.body.style.backgroundColor = "#8e9195";
+      document.body.style.backgroundColor = "black";
       document.body.style.color = "white";
-      showAlert("Converted to dark mode","success : ");
-     // document.title = "heheh";  this line can be used to change the title of the site
+      showAlert("Converted to dark mode", "success");
     } else {
       setMode("light");
       document.body.style.backgroundColor = "white";
       document.body.style.color = "black";
-      showAlert("Converted to light mode","success : ");
+      showAlert("Converted to light mode", "success");
     }
-  }
+  };
 
   return (
-   <>
-   <Router>
-    <Navbar title="VV" mode= {mode} toggleMode={toggleMode}/>
-   <Alert alert={alert}/>
-   <div className="container">
-   <Routes>
-    <Route exact path ="/" element={<Login showAlert={showAlert}/>}></Route>
-    <Route exact path ="/settings" element={<Settings/>}></Route>
-    <Route exact path ="/Packages" element={<Packages/>}></Route>
-    <Route exact path ="/addFeed" element={<addFeed/>}></Route>
-   <Route exact path ="/Register"  element={<Register showAlert={showAlert}/>}/>
-   </Routes>
-   </div>
-   </Router>
-   </>
+    <>
+      <Router>
+        <Navbar title="VV" mode={mode} toggleMode={toggleMode} />
+        <Alert alert={alert} />
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Login showAlert={showAlert} />} />
+            <Route path="/Pages/settings" element={<Settings />} />
+            <Route path="/Pages/packages" element={<Packages />} />
+            <Route path="/Pages/addFeed" element={<AddFeed />} />
+            <Route path="/Pages/register" element={<Register showAlert={showAlert} />} />
+          </Routes>
+          <Footer/>
+        </div>
+      
+      </Router>
+      </>
+    
   );
 }
 
