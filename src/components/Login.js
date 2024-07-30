@@ -13,27 +13,28 @@ export default function Login(props) {
 
   return (
     <>
-    <div className='container'>
-    <h1>Login</h1>
-
-        <div classNameName="mb-3 my-5 mx-10 row">
-    <label for="staticEmail" classNameName="col-sm-2 col-form-label">Email</label>
-    <div classNameName="col-sm-10">
-      <input type="text"  classNameName="form-control-plaintext" id="staticEmail" placeholder="email@example.com"/>
-    </div>
+    <div >
+      <h1>Login Form</h1>
+      <div className="container my-3">
+  <form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
   </div>
-  <div classNameName="mb-3 my-5 mx-10 row">
-    <label for="inputPassword" classNameName="col-sm-2 col-form-label">Password</label>
-    <div classNameName="col-sm-10">
-      <input type="password" classNameName="form-control" id="inputPassword"/>
-    </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1"/>
   </div>
-  <div classNameName="container"> <button classNameNameName="btn btn-primary" onClick={Logged}>Login</button><br />
-     <Link classNameNameName="abc" to="/Register">Create a new account</Link>  </div>
-  
+  <div class="mb-3 form-check">
+  <Link to="/forgotPass">Forgot Password</Link>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+<Link to="/Register">Create a new account</Link>
 
-
-    </div>
+</div>
     </>
   )
 }

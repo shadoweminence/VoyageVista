@@ -1,7 +1,11 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useEffect} from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
 export default function Navbar(props) {
+  let location = useLocation();
+  useEffect(()=>{
+    console.log(location.pathname);
+  },[location]);
   return (
     <div>
       <nav class="navbar navbar-expand-lg navbar-${{props.mode} bg-${props.mode}">
@@ -12,16 +16,16 @@ export default function Navbar(props) {
     </button>
     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">
-            <Link className="nav-link active" aria-current="page" to="/">Home</Link>
+            <Link className={`nav-link ${location.pathname==="/"?"active":""}`} aria-current="page" to="/">Home</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/settings">Settings</Link>
+            <Link className={`nav-link ${location.pathname==="/settings"?"active":""}`} to="/settings">Settings</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/search">Packages</Link>
+            <Link className={`nav-link ${location.pathname==="/search"?"active":""}`} to="/search">Packages</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/addFeed">AddFeed</Link>
+            <Link className={`nav-link ${location.pathname==="/addFeed"?"active":""}`} to="/addFeed">AddFeed</Link>
           </li>
          
         </ul>

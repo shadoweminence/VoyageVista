@@ -50,6 +50,7 @@ function App() {
    <Router>
     <Navbar title="VV" mode= {mode} toggleMode={toggleMode}/>
    <Alert alert={alert}/>
+   <div className="container">
    <Routes>
     <Route exact path ="/" element={<Login showAlert={showAlert}/>}></Route>
     <Route exact path ="/settings" element={<Settings/>}></Route>
@@ -57,6 +58,7 @@ function App() {
     <Route exact path ="/addFeed" element={<addFeed/>}></Route>
    <Route exact path ="/Register"  element={<Register showAlert={showAlert}/>}/>
    </Routes>
+   </div>
    </Router>
    </>
   );
