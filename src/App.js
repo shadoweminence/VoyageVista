@@ -7,12 +7,15 @@ import Footer from './components/Layouts/Footer';
 import Settings from "./components/Pages/Settings";
 import Packages from "./components/Pages/Packages";
 import AddFeed from "./components/Pages/AddFeed";
+import Home from "./components/Pages/Home";
 import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
+import StatusState from './context/status/StatusState';
+import Profile from './components/Pages/Profile';
 
 
 function App() {
@@ -45,21 +48,25 @@ function App() {
 
   return (
     <>
+    <StatusState>
       <Router>
         <Navbar title="VV" mode={mode} toggleMode={toggleMode} />
         <Alert alert={alert} />
         <div className="container">
           <Routes>
             <Route path="/" element={<Login showAlert={showAlert} />} />
+            <Route path="/Pages/Home" element={<Home />} />
             <Route path="/Pages/settings" element={<Settings />} />
             <Route path="/Pages/packages" element={<Packages />} />
             <Route path="/Pages/addFeed" element={<AddFeed />} />
+            <Route path="/Pages/Profile" element={<Profile/>} />
             <Route path="/Pages/register" element={<Register showAlert={showAlert} />} />
           </Routes>
           <Footer/>
         </div>
       
       </Router>
+      </StatusState>
       </>
     
   );

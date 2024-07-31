@@ -16,7 +16,7 @@ export default function Navbar(props) {
     </button>
     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">
-            <Link className={`nav-link ${location.pathname==="/"?"active":""}`} aria-current="page" to="/">Home</Link>
+            <Link className={`nav-link ${location.pathname==="/"?"active":""}`} aria-current="page" to="/Pages/Home">Home</Link>
           </li>
           <li className="nav-item">
             <Link className={`nav-link ${location.pathname==="/settings"?"active":""}`} to="/Pages/settings">Settings</Link>
@@ -26,6 +26,9 @@ export default function Navbar(props) {
           </li>
           <li className="nav-item">
             <Link className={`nav-link ${location.pathname==="/addFeed"?"active":""}`} to="/Pages/addFeed">AddFeed</Link>
+          </li>
+          <li className="nav-item">
+            <Link className={`nav-link ${location.pathname==="/addFeed"?"active":""}`} to="/Pages/Profile">Profile</Link>
           </li>
          
         </ul>
