@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
 
-
+const ADMIN_EMAIL = 'admin123@gmail.com'; 
 
 const JWT_SECRET = "abce";
 
@@ -42,18 +42,23 @@ try{
 const salt =await bcrypt.genSalt(10);
 const secPass = await bcrypt.hash(req.body.password, salt);
 
+//Assign a role
+const role = req.body.email === ADMIN_EMAIL ? 'admin' : 'user';
+
   //Create a new user
   user = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: secPass,
+    role
   }) ;
  
   const data ={
     user:{
-      id: user.id
+      id: user.id,
+      role:user.role
     }
-  }
+  };
   const authtoken =jwt.sign(data, JWT_SECRET);
 
 
@@ -93,7 +98,8 @@ router.post('/login',[
 
     const data ={
         user:{
-            id: user.id
+            id: user.id,
+            role:user.role
         }
     }
 

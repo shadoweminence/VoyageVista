@@ -25,6 +25,7 @@ export default function Navbar(props) {
           <li className="nav-item">
             <Link className={`nav-link ${location.pathname==="/addFeed"?"active":""}`} to="/Pages/addFeed">AddFeed</Link>
           </li>
+          
           <li className="nav-item">
             <Link className={`nav-link ${location.pathname==="/addFeed"?"active":""}`} to="/Pages/Profile">Profile</Link>
           </li>
