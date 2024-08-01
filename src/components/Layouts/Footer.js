@@ -7,7 +7,8 @@ export default function Footer() {
       <h4 className="container p-3">ALL RIGHTS RESERVED &copy; Voyage Vista</h4>
 
       <p className="text-center mt-3">
-        <Link to="/about"> About</Link>|<Link to="/policy">Privacy Policy</Link>
+        <Link to="/Admin/AddPackage">About</Link>|
+        <Link to="/policy">Privacy Policy</Link>
         |<Link to="/contact">Contact</Link>
       </p>
     </div>

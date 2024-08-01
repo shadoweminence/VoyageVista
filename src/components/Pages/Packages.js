@@ -1,5 +1,6 @@
 import React from 'react'
 import {Helmet} from "react-helmet";
+import {Tourpack} from "../Layouts/Tourpack";
 
 export default function Packages() {
   return (
@@ -10,8 +11,7 @@ export default function Packages() {
               
             </Helmet>
 
-      <h1>here are packages</h1>
-      jpg huna ya
+            <Tourpack/>
     </div>
   )
 }

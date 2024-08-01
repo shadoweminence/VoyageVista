@@ -5,7 +5,7 @@ const cors = require('cors');  // Import the cors package
 connectToMongo();
 
 const app = express();
-const port = 5006;
+const port = 5010;
 
 // Use CORS middleware to allow requests from different origins
 app.use(cors());
@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Available routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/status', require('./routes/status'));
+app.use('/api/tourpack', require('./routes/tourpack'));
 
 app.listen(port, () => {
     console.log(`Voyage Vista backend listening at http://localhost:${port}`);

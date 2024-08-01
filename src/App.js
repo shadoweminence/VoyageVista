@@ -14,8 +14,9 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import StatusState from './context/status/StatusState';
+import TourpackState from './context/tourpack/TourpackState';
 import Profile from './components/Pages/Profile';
+import AddPackage from './components/Admin/AddPackage';
 
 
 function App() {
@@ -48,11 +49,13 @@ function App() {
 
   return (
     <>
-    <StatusState>
+  
+<TourpackState>
       <Router>
         <Navbar title="VV" mode={mode} toggleMode={toggleMode} />
         <Alert alert={alert} />
         <div className="container">
+
           <Routes>
             <Route path="/" element={<Login showAlert={showAlert} />} />
             <Route path="/Pages/Home" element={<Home />} />
@@ -61,12 +64,14 @@ function App() {
             <Route path="/Pages/addFeed" element={<AddFeed />} />
             <Route path="/Pages/Profile" element={<Profile/>} />
             <Route path="/Pages/register" element={<Register showAlert={showAlert} />} />
+          
+            <Route path="/Admin/AddPackage" element={<AddPackage/>} />
           </Routes>
           <Footer/>
         </div>
       
       </Router>
-      </StatusState>
+      </TourpackState>
       </>
     
   );

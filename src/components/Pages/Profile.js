@@ -1,6 +1,7 @@
 import React from "react";
 import {Helmet} from "react-helmet";
-import Status from "../Layouts/Status";
+
+
 
 
 
@@ -17,7 +18,7 @@ export default function Profile() {
             </Helmet>
     <div>
        
-      <Status/>
+   
     </div>
     </>
   )

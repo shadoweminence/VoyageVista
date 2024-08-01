@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
-const StatusSchema = new Schema({
+const TourpackSchema = new Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'user'
@@ -14,12 +14,6 @@ const StatusSchema = new Schema({
         type: String,
         requied: false,
     },
-    pic:{
-        type:String,
-        contentType: String,
-        data:Buffer,
-        required: false
-    },
     tag:{
         type: String,
         default:"General"
@@ -31,4 +25,4 @@ const StatusSchema = new Schema({
 });
 
 
-module.exports= mongoose.model('status', StatusSchema);
+module.exports= mongoose.model('tourpack', TourpackSchema);
