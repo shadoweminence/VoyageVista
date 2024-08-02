@@ -4,7 +4,7 @@ import {Helmet} from "react-helmet";
 import tourpackContext from '../../context/tourpack/tourContext';
 import { EditPack } from '../Layouts/Tourpack';
 
-const AdminPackage = () => {
+const AdminPackage = (props) => {
 
 
 

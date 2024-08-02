@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import TourpackContext from "./tourContext";
+import AlertContext from "../../context/Alert/alertContext";
 
 const TourpackState = (props) => {
-const host ="http://localhost:5001/api/tourpack"
+   const { showAlert } = useContext(AlertContext);
+const host ="http://localhost:5000/api/tourpack"
 
   const tourpackInitial = []
   const [tourpacks, setTourpacks] = useState(tourpackInitial);
@@ -31,7 +33,7 @@ const host ="http://localhost:5001/api/tourpack"
       method:'POST',
       headers:{
         'Content-Type': 'application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZhYjRjMzkwNmY1ZTQ1OWE4YWIyOWM1Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTcyMjUwOTk1OX0.AhWDfVWYuxzxPZbA6n9gGR04dvodFqX9k6pJ0bSMKiA'
+        'auth-token':localStorage.getItem('token')
       },
       body:JSON.stringify({title,description,tag})
     });
@@ -47,7 +49,10 @@ const host ="http://localhost:5001/api/tourpack"
       date: "2024-07-29T08:25:02.105Z",
       __v: 0,
     };
+    
     setTourpacks(tourpacks.concat(tourpack));
+    showAlert("Added Successfully","Success");
+   
   };
 
 
@@ -59,7 +64,7 @@ const host ="http://localhost:5001/api/tourpack"
         method:'DELETE',
         headers:{
           'Content-Type': 'application/json',
-          'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZhYjRjMzkwNmY1ZTQ1OWE4YWIyOWM1Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTcyMjUwOTk1OX0.AhWDfVWYuxzxPZbA6n9gGR04dvodFqX9k6pJ0bSMKiA'
+          'auth-token':localStorage.getItem('token')
         },
     
       });
@@ -71,6 +76,7 @@ const host ="http://localhost:5001/api/tourpack"
       return tourpack._id !== id;
     });
     setTourpacks(newTourpacks);
+    showAlert("Deleted Successfully", "Success");
   };
 
   //edit a package
@@ -80,10 +86,9 @@ const host ="http://localhost:5001/api/tourpack"
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZhYjRjMzkwNmY1ZTQ1OWE4YWIyOWM1Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTcyMjUwODM4NH0.J33hucKBWTiBUU7CgiyeDDv1LxG4_udtojZxnuwfiKk",
+          "auth-token": localStorage.getItem("token"),
         },
-        body: JSON.stringify({title, description, tag}),
+        body: JSON.stringify({ title, description, tag }),
       });
     const json = await response.json();
     console.log(json);
@@ -101,6 +106,7 @@ const host ="http://localhost:5001/api/tourpack"
      
     }
     setTourpacks(newTourpacks);
+    showAlert("Edited Successfully", "Success");
   }
   return (
     <TourpackContext.Provider

@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+/* for navbar */
+/* General Link Styles */
+.nav-link {
+  color: inherit; /* Use the color set by the parent or theme */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Active Link Styles */
+.nav-link.active {
+  font-weight: bold; /* Highlight active link */
+  border-radius: 4px; /* Add some border radius */
+}
+
+/* Light Theme Styles */
+.bg-light .nav-link.active {
+  background-color: #000407; /* Light mode active link color */
+  color: #ffffff; /* Light mode text color for active link */
+}
+
+/* Dark Theme Styles */
+.bg-dark .nav-link.active {
+  background-color: #343a40; /* Dark mode active link color */
+  color: #ffffff; /* Dark mode text color for active link */
+}
+

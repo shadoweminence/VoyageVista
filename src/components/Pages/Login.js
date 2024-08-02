@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState ,useContext} from 'react'
 import { Link, useNavigate} from 'react-router-dom';
 import {Helmet} from "react-helmet";
+import AlertContext from '../../context/Alert/alertContext';
 
 
 
 
 export default function Login(props) {
+  const {showAlert} = useContext(AlertContext);
  const[credentials,setCredentials] = useState({email:"",password:""})
  let navigate = useNavigate();
 
@@ -30,17 +32,17 @@ export default function Login(props) {
           if(json.success){
             //save the authtoken and redirect
               localStorage.setItem('token',json.authtoken);
-              props.showAlert("Logged In","success");
+              showAlert("Logged In","success");
               navigate("/Pages/frontPage")
           }else{
-            props.showAlert("Invalid Credentials","warning");
+            showAlert("Invalid Credentials", "danger");
           }
         
         
           
       } catch (error) {
           console.error('Fetch error:', error);
-          props.showAlert("Login failed: " + (error.response?.data?.error || error.message), "danger");
+          showAlert("Login failed: " + (error.response?.data?.error || error.message), "danger");
       }
   };
   const onChange = (e) => {

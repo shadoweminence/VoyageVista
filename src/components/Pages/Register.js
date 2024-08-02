@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import {Helmet} from "react-helmet";
+import AlertContext from "../../context/Alert/alertContext";
 
 export default function Register(props) {
-    
+     const { showAlert } = useContext(AlertContext);
     const[credentials,setCredentials] = useState({name:"",email:"",password:"",cpassword:""})
     let navigate = useNavigate();
 
@@ -15,7 +16,7 @@ export default function Register(props) {
 
         // Check if passwords match
     if (password !== cpassword) {
-      props.showAlert('Passwords do not match', 'warning');
+      showAlert('Passwords do not match', 'warning');
       return;
     }
 
@@ -35,10 +36,10 @@ export default function Register(props) {
           if(json.success){
             //save the authtoken and redirect
               localStorage.setItem('token',json.authtoken);
-              props.showAlert("Registered Successfully","success");
+              showAlert('Registered Successfully','success');
               navigate("/Pages/frontPage")
           }else{
-            props.showAlert("Invalid credentials")
+            showAlert("Invalid credentials")
           }
       } catch (error) {
           console.error('Fetch error:', error);

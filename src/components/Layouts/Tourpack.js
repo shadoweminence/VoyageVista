@@ -1,14 +1,20 @@
 import React, { useContext,useState, useEffect, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 import TourpackItem from "./TourpackItem";
 import tourpackContext from "../../context/tourpack/tourContext";
 import EditPackage from "../Admin/EditPackage";
 
 const Tourpack = () => {
+   let navigate = useNavigate();
   const context = useContext(tourpackContext);
   const { tourpacks, getTourpacks } = context;
   useEffect(() => {
-    getTourpacks();
+    if(localStorage.getItem('token')){
+getTourpacks();
+    }else{
+      navigate("/");
+    }
+    
     // eslint-disable-next-line
   }, []);
 
