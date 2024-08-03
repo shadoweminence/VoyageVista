@@ -15,6 +15,7 @@ import Profile from "./components/Pages/Profile";
 import AddPackage from "./components/Admin/AddPackage";
 import AlertProvider from "./context/Alert/AlertProvider";
 import Search from "./components/Pages/Search";
+import AuthProvider from "./context/Auth/AuthProvider";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -48,25 +49,31 @@ function App() {
     <>
       <AlertProvider>
         <TourpackState>
-          <Router>
-            <Navbar title="Voyage Vista" mode={mode} toggleMode={toggleMode} />
-            <Alert alert={alert} />
-            <div className="container">
-              <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/Pages/Home" element={<Home />} />
-                <Route path="/Pages/search" element={<Search />} />
-                <Route path="/Pages/settings" element={<Settings />} />
-                <Route path="/Pages/packages" element={<Packages />} />
-                <Route path="/Pages/addFeed" element={<AddFeed />} />
-                <Route path="/Pages/Profile" element={<Profile />} />
-                <Route path="/Pages/register" element={<Register />} />
+          <AuthProvider>
+            <Router>
+              <Navbar
+                title="Voyage Vista"
+                mode={mode}
+                toggleMode={toggleMode}
+              />
+              <Alert alert={alert} />
+              <div className="container">
+                <Routes>
+                  <Route path="/Pages/Login" element={<Login />} />
+                  <Route path="/" element={<Home />} />
+                  <Route path="/Pages/search" element={<Search />} />
+                  <Route path="/Pages/settings" element={<Settings />} />
+                  <Route path="/Pages/packages" element={<Packages />} />
+                  <Route path="/Pages/addFeed" element={<AddFeed />} />
+                  <Route path="/Pages/Profile" element={<Profile />} />
+                  <Route path="/Pages/register" element={<Register />} />
 
-                <Route path="/Admin/AddPackage" element={<AddPackage />} />
-              </Routes>
-              <Footer />
-            </div>
-          </Router>
+                  <Route path="/Admin/AddPackage" element={<AddPackage />} />
+                </Routes>
+                <Footer />
+              </div>
+            </Router>
+          </AuthProvider>
         </TourpackState>
       </AlertProvider>
     </>

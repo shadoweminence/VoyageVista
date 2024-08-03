@@ -1,25 +1,30 @@
 // Settings.js
+import React, { useContext, useEffect } from "react";
+import { Helmet } from "react-helmet";
+import AuthContext from "../../context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-import {Helmet} from "react-helmet";
+export default function Settings() {
+  const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
 
+  useEffect(() => {
+    if (!auth.isAuthenticated) {
+      const timer = setTimeout(() => {
+        navigate("/Pages/Login", { replace: true });
+      }, 100);
 
-const Settings = () => {
+      return () => clearTimeout(timer);
+    }
+  }, [auth.isAuthenticated, navigate]);
 
   return (
     <div>
- <Helmet>
-                <meta charSet="utf-8" />
-                <title>Settings- Voyage Vista</title>
-              
-            </Helmet>
-
-      <ul>
-        <li>User Details</li>
-        <li>Password and Security</li>
-      </ul>
-     
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Search- Voyage Vista</title>
+      </Helmet>
+      {/* Your component content */}
     </div>
   );
-};
-
-export default Settings;
+}

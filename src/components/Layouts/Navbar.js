@@ -1,18 +1,25 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/Auth/AuthContext";
 
 export default function Navbar(props) {
-  let location = useLocation();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { auth, logout } = useContext(AuthContext);
 
-  // Helper function to determine if a link is active
   const isActive = (path) => location.pathname === path;
 
-  // Handler for logout
   const handleLogout = () => {
-    // Implement your logout logic here, such as clearing user data and redirecting
-    console.log("User logged out");
-    // Example: props.onLogout() or redirect to login page
+    logout();
+    navigate("/Pages/Login");
   };
+
+  if (!auth.isAuthenticated) {
+    return null; // Optionally handle unauthenticated users
+  }
+
+  // Check user role for admin
+  const isAdmin = auth.role === "admin"; // Adjust based on your AuthContext setup
 
   return (
     <div
@@ -44,14 +51,12 @@ export default function Navbar(props) {
 
             <li className={`nav-item mb-3`}>
               <Link
-                className={`nav-link ${
-                  isActive("/Pages/Home") ? "active" : ""
-                }`}
-                aria-current="page"
-                to="/Pages/Home"
+                className={`nav-link ${isActive("/") ? "active" : ""}`}
+                aria-current={isActive("/") ? "page" : undefined}
+                to="/"
                 style={{ padding: "10px 15px" }}
               >
-                <i class="fa-solid fa-house mx-3"></i>
+                <i className="fa-solid fa-house mx-3"></i>
                 Home
               </Link>
             </li>
@@ -64,7 +69,7 @@ export default function Navbar(props) {
                 to="/Pages/Settings"
                 style={{ padding: "10px 15px" }}
               >
-                <i class="fa-solid fa-gear mx-3"></i>
+                <i className="fa-solid fa-gear mx-3"></i>
                 Settings
               </Link>
             </li>
@@ -77,7 +82,7 @@ export default function Navbar(props) {
                 to="/Pages/Packages"
                 style={{ padding: "10px 15px" }}
               >
-                <i class="fa-solid fa-box-open mx-3"></i>
+                <i className="fa-solid fa-box-open mx-3"></i>
                 Packages
               </Link>
             </li>
@@ -90,7 +95,7 @@ export default function Navbar(props) {
                 to="/Pages/addFeed"
                 style={{ padding: "10px 15px" }}
               >
-                <i class="fa-solid fa-plus mx-3"></i>
+                <i className="fa-solid fa-plus mx-3"></i>
                 AddFeed
               </Link>
             </li>
@@ -103,10 +108,26 @@ export default function Navbar(props) {
                 to="/Pages/Profile"
                 style={{ padding: "10px 15px" }}
               >
-                <i class="fa-solid fa-user mx-3"></i>
+                <i className="fa-solid fa-user mx-3"></i>
                 Profile
               </Link>
             </li>
+
+            {/* Conditionally render the "Edit" link based on user role */}
+            {isAdmin && (
+              <li className={`nav-item mb-3`}>
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Edit") ? "active" : ""
+                  }`}
+                  to="/Pages/Edit"
+                  style={{ padding: "10px 15px" }}
+                >
+                  <i className="fa-solid fa-edit mx-3"></i>
+                  Edit
+                </Link>
+              </li>
+            )}
 
             <div
               className={`form-check form-switch mt-3 text-${
@@ -131,7 +152,6 @@ export default function Navbar(props) {
         </ul>
       </nav>
 
-      {/* Logout Button */}
       <div className="mt-auto">
         <button
           className={`btn btn-${
@@ -140,7 +160,7 @@ export default function Navbar(props) {
           onClick={handleLogout}
           style={{ marginTop: "auto", marginBottom: "20px" }}
         >
-          <i class="fa-solid fa-right-from-bracket mx-3"></i>
+          <i className="fa-solid fa-right-from-bracket mx-3"></i>
           Logout
         </button>
       </div>

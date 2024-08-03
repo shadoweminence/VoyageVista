@@ -1,6 +1,6 @@
 const connectToMongo = require("./db");
-const express = require('express');
-const cors = require('cors');  // Import the cors package
+const express = require("express");
+const cors = require("cors"); // Import the cors package
 
 connectToMongo();
 
@@ -14,9 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 // Available routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/tourpack', require('./routes/tourpack'));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/tourpack", require("./routes/tourpack"));
 
 app.listen(port, () => {
-    console.log(`Voyage Vista backend listening at http://localhost:${port}`);
+  console.log(`Voyage Vista backend listening at http://localhost:${port}`);
 });
