@@ -1,27 +1,26 @@
-import React, { useContext,useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import TourpackItem from "./TourpackItem";
 import tourpackContext from "../../context/tourpack/tourContext";
 import EditPackage from "../Admin/EditPackage";
 
 const Tourpack = () => {
-   let navigate = useNavigate();
+  let navigate = useNavigate();
   const context = useContext(tourpackContext);
   const { tourpacks, getTourpacks } = context;
   useEffect(() => {
-    if(localStorage.getItem('token')){
-getTourpacks();
-    }else{
+    if (localStorage.getItem("token")) {
+      getTourpacks();
+    } else {
       navigate("/");
     }
-    
+
     // eslint-disable-next-line
   }, []);
 
   return (
     <>
       <div className="container my-3">
-        
         <h2 className="text-center">Available Packages</h2>
 
         {tourpacks.map((tourpack) => {
@@ -33,38 +32,41 @@ getTourpacks();
 };
 const EditPack = () => {
   const context = useContext(tourpackContext);
-  const { tourpacks, getTourpacks,editTourpack } = context;
+  const { tourpacks, getTourpacks, editTourpack } = context;
   useEffect(() => {
     getTourpacks();
     // eslint-disable-next-line
   }, []);
 
-
-
   const ref = useRef(null);
   const refClose = useRef(null);
   const [tourpack, setTourpack] = useState({
-    id:"",
+    id: "",
     etitle: "",
     edescription: "",
     etag: "default",
   });
 
-    const updateTourpack = (currentTourpack) => {
-      ref.current.click();
-      setTourpack({
-        id:currentTourpack._id,
-        etitle: currentTourpack.title,
-        edescription: currentTourpack.description,
-        etag: currentTourpack.tag,
-      });
-    };
+  const updateTourpack = (currentTourpack) => {
+    ref.current.click();
+    setTourpack({
+      id: currentTourpack._id,
+      etitle: currentTourpack.title,
+      edescription: currentTourpack.description,
+      etag: currentTourpack.tag,
+    });
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
     refClose.current.click();
-   editTourpack(tourpack.id,tourpack.etitle,tourpack.edescription,tourpack.etag)
-      };
+    editTourpack(
+      tourpack.id,
+      tourpack.etitle,
+      tourpack.edescription,
+      tourpack.etag
+    );
+  };
   const onChange = (e) => {
     setTourpack({ ...tourpack, [e.target.name]: e.target.value });
   };
@@ -103,7 +105,6 @@ const EditPack = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <h1>Add a tourpack</h1>
               <form>
                 <div className="mb-3">
                   <label htmlFor="etitle" className="form-label">
@@ -159,7 +160,11 @@ const EditPack = () => {
                 {" "}
                 Close
               </button>
-              <button onClick={handleClick} type="button" className="btn btn-primary">
+              <button
+                onClick={handleClick}
+                type="button"
+                className="btn btn-primary"
+              >
                 {" "}
                 Update
               </button>

@@ -14,11 +14,12 @@ export default function Navbar(props) {
     navigate("/Pages/Login");
   };
 
+  console.log("Auth context in Navbar:", auth); // Debug statement
+
   if (!auth.isAuthenticated) {
     return null; // Optionally handle unauthenticated users
   }
 
-  // Check user role for admin
   const isAdmin = auth.role === "admin"; // Adjust based on your AuthContext setup
 
   return (
@@ -118,13 +119,13 @@ export default function Navbar(props) {
               <li className={`nav-item mb-3`}>
                 <Link
                   className={`nav-link ${
-                    isActive("/Pages/Edit") ? "active" : ""
+                    isActive("/Admin/AddPackage") ? "active" : ""
                   }`}
-                  to="/Pages/Edit"
+                  to="/Admin/AddPackage"
                   style={{ padding: "10px 15px" }}
                 >
                   <i className="fa-solid fa-edit mx-3"></i>
-                  Edit
+                  Edit Packages
                 </Link>
               </li>
             )}
