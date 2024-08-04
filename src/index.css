@@ -34,7 +34,6 @@ code {
 
 /* Dark Theme Styles */
 .bg-dark .nav-link.active {
-  background-color: #343a40; /* Dark mode active link color */
+  background-color: #ff0055; /* Dark mode active link color */
   color: #ffffff; /* Dark mode text color for active link */
 }
-

@@ -1,25 +1,26 @@
-import React, { useState, useContext } from 'react'
-import {Helmet} from "react-helmet";
+import React, { useState, useContext } from "react";
+import { Helmet } from "react-helmet";
 
-import tourpackContext from '../../context/tourpack/tourContext';
-import { EditPack } from '../Layouts/Tourpack';
+import tourpackContext from "../../context/tourpack/tourContext";
+import { EditPack } from "../Layouts/Tourpack";
 
 const AdminPackage = (props) => {
-
-
-
   const context = useContext(tourpackContext);
-  const {addTourpack} = context
+  const { addTourpack } = context;
 
-  const [tourpack,setTourpack] = useState({title:"",description:"",tag:"default"})
-  const handleClick =(e)=>{
+  const [tourpack, setTourpack] = useState({
+    title: "",
+    description: "",
+    tag: "default",
+  });
+  const handleClick = (e) => {
     e.preventDefault();
     addTourpack(tourpack.title, tourpack.description, tourpack.tag);
-
-  }
-  const onChange =(e)=>{
-    setTourpack({...tourpack,[e.target.name]: e.target.value})
-  }
+    setTourpack({ title: "", description: "", tag: "default" });
+  };
+  const onChange = (e) => {
+    setTourpack({ ...tourpack, [e.target.name]: e.target.value });
+  };
   return (
     <div>
       <Helmet>
@@ -52,7 +53,6 @@ const AdminPackage = (props) => {
               name="description"
               id="description"
             />
-          
           </div>
           <div className="mb-3">
             <label htmlFor="tag" className="form-label">
@@ -79,6 +79,6 @@ const AdminPackage = (props) => {
       <EditPack />
     </div>
   );
-}
+};
 
-export default AdminPackage
+export default AdminPackage;

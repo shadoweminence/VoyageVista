@@ -141,13 +141,14 @@ router.post("/getuser", fetchuser, async (req, res) => {
 //Route 4: Update user details using : PUT
 
 router.put("/updateuserdetails/:id", fetchuser, async (req, res) => {
+  let success = false;
   const { name, email, oldPassword, newPassword } = req.body;
 
   try {
     // Find the user by ID
     let userDetails = await User.findById(req.params.id);
     if (!userDetails) {
-      return res.status(400).send("User not found");
+      return res.status(400).json({ success, error: "User not found" });
     }
 
     // Check if old password is provided
@@ -157,7 +158,9 @@ router.put("/updateuserdetails/:id", fetchuser, async (req, res) => {
         userDetails.password
       );
       if (!passwordMatch) {
-        return res.status(400).send("Incorrect old password");
+        return res
+          .status(400)
+          .json({ success, error: "Please enter correct old password." });
       }
     }
 
@@ -180,7 +183,8 @@ router.put("/updateuserdetails/:id", fetchuser, async (req, res) => {
       { $set: newUserDetails },
       { new: true }
     );
-    res.json({ userDetails });
+    success = true;
+    res.json({ success, userDetails });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal server error");

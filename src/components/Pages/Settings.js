@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import AuthContext from "../../context/Auth/AuthContext";
-import AlertContext from "../../context/Alert/alertContext";
+
 import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const navigate = useNavigate();
-  const { showAlert } = useContext(AlertContext);
+
   const { auth, User, getUserDetails, editUserDetails } =
     useContext(AuthContext);
 
@@ -47,6 +47,7 @@ export default function Settings() {
   const handleSaveClick = (e) => {
     e.preventDefault();
     refClose.current.click();
+
     editUserDetails(
       userData.id,
       userData.name,
@@ -54,7 +55,6 @@ export default function Settings() {
       userData.oldPassword,
       userData.newPassword
     );
-    showAlert(`Changes saved successfully`, "info");
   };
 
   const handleChange = (e) => {

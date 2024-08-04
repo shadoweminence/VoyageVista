@@ -5,7 +5,7 @@ const cors = require("cors"); // Import the cors package
 connectToMongo();
 
 const app = express();
-const port = 5000;
+const port = 5001;
 
 // Use CORS middleware to allow requests from different origins
 app.use(cors());

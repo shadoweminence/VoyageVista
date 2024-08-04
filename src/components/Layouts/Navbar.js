@@ -14,8 +14,6 @@ export default function Navbar(props) {
     navigate("/Pages/Login");
   };
 
-  console.log("Auth context in Navbar:", auth); // Debug statement
-
   if (!auth.isAuthenticated) {
     return null; // Optionally handle unauthenticated users
   }
