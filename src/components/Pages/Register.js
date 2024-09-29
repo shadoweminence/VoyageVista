@@ -55,7 +55,7 @@ export default function Register(props) {
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      props.showAlert(
+      showAlert(
         "Registration  failed: " +
           (error.response?.data?.error || error.message),
         "danger"

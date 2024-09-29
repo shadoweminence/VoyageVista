@@ -25,12 +25,15 @@ export default function Navbar(props) {
       className={`sidebar bg-${props.mode}`}
       style={{
         height: "100vh",
-        width: "250px",
+        maxWidth: "250px", // Set max width
         position: "fixed",
         padding: "20px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        overflowX: "hidden",
+        overflowY: "auto", // Allow vertical scrolling if needed
+        transition: "max-width 0.3s ease", // Smooth transition for width changes
       }}
     >
       <nav
@@ -40,14 +43,6 @@ export default function Navbar(props) {
       >
         <ul className="nav flex-column">
           <div className="container-fluid">
-            <Link
-              className="navbar-brand"
-              to="/"
-              style={{ marginBottom: "20px" }}
-            >
-              {props.title}
-            </Link>
-
             <li className={`nav-item mb-3`}>
               <Link
                 className={`nav-link ${isActive("/") ? "active" : ""}`}
@@ -56,7 +51,7 @@ export default function Navbar(props) {
                 style={{ padding: "10px 15px" }}
               >
                 <i className="fa-solid fa-house mx-3"></i>
-                Home
+                <span className="d-none d-lg-inline">Home</span>
               </Link>
             </li>
 
@@ -69,7 +64,7 @@ export default function Navbar(props) {
                 style={{ padding: "10px 15px" }}
               >
                 <i className="fa-solid fa-gear mx-3"></i>
-                Settings
+                <span className="d-none d-lg-inline">Settings</span>
               </Link>
             </li>
 
@@ -82,7 +77,20 @@ export default function Navbar(props) {
                 style={{ padding: "10px 15px" }}
               >
                 <i className="fa-solid fa-box-open mx-3"></i>
-                Packages
+                <span className="d-none d-lg-inline">Packages</span>
+              </Link>
+            </li>
+
+            <li className={`nav-item mb-3`}>
+              <Link
+                className={`nav-link ${
+                  isActive("/Pages/search") ? "active" : ""
+                }`}
+                to="/Pages/search"
+                style={{ padding: "10px 15px" }}
+              >
+                <i className="fa-solid fa-magnifying-glass mx-3"></i>
+                <span className="d-none d-lg-inline">Search</span>
               </Link>
             </li>
 
@@ -95,7 +103,20 @@ export default function Navbar(props) {
                 style={{ padding: "10px 15px" }}
               >
                 <i className="fa-solid fa-plus mx-3"></i>
-                AddFeed
+                <span className="d-none d-lg-inline">AddFeed</span>
+              </Link>
+            </li>
+
+            <li className={`nav-item mb-3`}>
+              <Link
+                className={`nav-link ${
+                  isActive("/Pages/Chat") ? "active" : ""
+                }`}
+                to="/Pages/Chat"
+                style={{ padding: "10px 15px" }}
+              >
+                <i className="fa-brands fa-rocketchat mx-3"></i>
+                <span className="d-none d-lg-inline">Chat</span>
               </Link>
             </li>
 
@@ -108,7 +129,7 @@ export default function Navbar(props) {
                 style={{ padding: "10px 15px" }}
               >
                 <i className="fa-solid fa-user mx-3"></i>
-                Profile
+                <span className="d-none d-lg-inline">Profile</span>
               </Link>
             </li>
 
@@ -123,7 +144,7 @@ export default function Navbar(props) {
                   style={{ padding: "10px 15px" }}
                 >
                   <i className="fa-solid fa-edit mx-3"></i>
-                  Edit Packages
+                  <span className="d-none d-lg-inline">Edit Packages</span>
                 </Link>
               </li>
             )}
@@ -144,14 +165,30 @@ export default function Navbar(props) {
                 className="form-check-label"
                 htmlFor="flexSwitchCheckDefault"
               >
-                Enable Dark Mode
+                <i className="fa-solid fa-moon mx-3"></i>
+                <span className="d-none d-lg-inline">Dark Mode</span>
               </label>
+            </div>
+
+            {/* Collapsible Button */}
+            <div className="d-lg-none">
+              <button
+                className={`btn btn-${
+                  props.mode === "dark" ? "dark" : "light"
+                } w-100`}
+                onClick={handleLogout}
+                style={{ marginTop: "20px" }}
+              >
+                <i className="fa-solid fa-right-from-bracket mx-3"></i>
+                Logout
+              </button>
             </div>
           </div>
         </ul>
       </nav>
 
-      <div className="mt-auto">
+      {/* Desktop Logout Button */}
+      <div className="d-none d-lg-block mt-auto">
         <button
           className={`btn btn-${
             props.mode === "dark" ? "dark" : "light"
@@ -160,7 +197,7 @@ export default function Navbar(props) {
           style={{ marginTop: "auto", marginBottom: "20px" }}
         >
           <i className="fa-solid fa-right-from-bracket mx-3"></i>
-          Logout
+          <span className="d-none d-lg-inline">Logout</span>
         </button>
       </div>
     </div>
