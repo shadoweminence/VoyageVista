@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
 
   const [User, setUser] = useState(null);
 
-  const host = "http://localhost:5001/api/auth";
+  const host = "http://localhost:5000/api/auth";
 
   useEffect(() => {
     const token = localStorage.getItem("token");

@@ -16,6 +16,7 @@ import AddPackage from "./components/Admin/AddPackage";
 import AlertProvider from "./context/Alert/AlertProvider";
 import Search from "./components/Pages/Search";
 import AuthProvider from "./context/Auth/AuthProvider";
+import Chat from "./components/Pages/chat";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -62,6 +63,10 @@ function App() {
                   <Route path="/Pages/Login" element={<Login />} />
                   <Route path="/" element={<Home />} />
                   <Route path="/Pages/search" element={<Search />} />
+                  <Route
+                    path="/Pages/chat"
+                    element={<Chat userId="some User Id" />}
+                  />
                   <Route path="/Pages/settings" element={<Settings />} />
                   <Route path="/Pages/packages" element={<Packages />} />
                   <Route path="/Pages/addFeed" element={<AddFeed />} />
