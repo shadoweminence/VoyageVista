@@ -4,7 +4,7 @@ import axios from "axios";
 import AuthContext from "../../context/Auth/AuthContext";
 
 export default function ChatInterface() {
-  const { auth } = useContext(AuthContext);
+  const { auth, User, getUserDetails } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [participants, setParticipants] = useState([]); // For participants
@@ -15,19 +15,8 @@ export default function ChatInterface() {
 
   // Fetch all participants with the latest messages when component mounts
   useEffect(() => {
-    const fetchParticipants = async () => {
-      if (!auth.User || !auth.User._id) return; // Ensure auth.User._id is available
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/messages/participants/${auth.User._id}`
-        );
-        setParticipants(response.data);
-      } catch (error) {
-        console.error("Error fetching participants:", error);
-      }
-    };
-    fetchParticipants();
-  }, [auth.User]);
+    getUserDetails();
+  }, []);
 
   const handleSearch = async () => {
     if (!searchQuery) {
@@ -52,7 +41,7 @@ export default function ChatInterface() {
     setSelectedUser(user);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/messages/${auth.User._id}/${user._id}`
+        `http://localhost:5000/api/messages/${User._id}/${user._id}`
       );
       setMessages(response.data);
     } catch (error) {
@@ -60,35 +49,37 @@ export default function ChatInterface() {
     }
   };
 
+  // ...
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    // Check if the message is not empty and a user is selected
+
+    if (!User || !User._id) {
+      console.error("User is not defined or missing _id");
+      return; // Stop further execution if User._id is not available
+    }
+
     if (newMessage.trim() && selectedUser) {
       try {
         const messageData = {
-          sender: auth.User._id, // Logged-in user's ID
-          receiver: selectedUser._id, // The user being chatted with
-          content: newMessage, // The message text
+          sender: User._id, // Ensure User._id exists here
+          receiver: selectedUser._id,
+          content: newMessage,
         };
 
-        console.log("Sending message:", messageData); // Debugging log
-
-        // POST message to backend
         const response = await axios.post(
           "http://localhost:5000/api/messages",
           messageData
         );
 
-        console.log("Message sent successfully:", response.data); // Debugging log
-
-        // Add the message to the message list
+        // Add sent message to the message list
         setMessages((prevMessages) => [...prevMessages, response.data]);
-        setNewMessage(""); // Clear the message input after sending
+        setNewMessage(""); // Clear message input
       } catch (error) {
-        console.error("Error sending message:", error); // Log any error that occurs
+        console.error("Error sending message:", error);
       }
     } else {
-      console.warn("Message is empty or no user selected."); // Log a warning if conditions aren't met
+      console.warn("Message is empty or no user selected.");
     }
   };
 
@@ -156,15 +147,13 @@ export default function ChatInterface() {
                       <ListGroup.Item
                         key={index}
                         className={
-                          msg.sender === auth.User._id
+                          msg.sender === User._id
                             ? "text-end" // Align your messages to the right
                             : "text-start" // Align their messages to the left
                         }
                       >
                         <strong>
-                          {msg.sender === auth.User._id
-                            ? "You"
-                            : selectedUser.name}
+                          {msg.sender === User._id ? "You" : selectedUser.name}
                         </strong>
                         : {msg.content}
                       </ListGroup.Item>
