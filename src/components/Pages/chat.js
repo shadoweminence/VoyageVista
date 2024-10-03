@@ -7,20 +7,31 @@ export default function ChatInterface() {
   const { auth, User, getUserDetails } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [participants, setParticipants] = useState([]); // For participants
+  const [participants, setParticipants] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Fetch all participants with the latest messages when component mounts
   useEffect(() => {
+    const fetchParticipants = async () => {
+      if (!User) return; // Ensure User is defined
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/messages/${User._id}` // Ensure endpoint is correct
+        );
+        setParticipants(response.data);
+      } catch (error) {
+        console.error("Error fetching participants:", error);
+      }
+    };
+
+    fetchParticipants();
     getUserDetails();
-  }, []);
+  }, [User]);
 
   const handleSearch = async () => {
     if (!searchQuery) {
-      // If the search query is empty, reset search results
       setSearchResults([]);
       return;
     }
@@ -36,6 +47,7 @@ export default function ChatInterface() {
       setLoading(false);
     }
   };
+
   const selectUser = async (user) => {
     setSelectedUser(user);
     try {
@@ -43,19 +55,10 @@ export default function ChatInterface() {
         `http://localhost:5000/api/messages/${User._id}/${user._id}`
       );
       const messages = response.data.map((message) => {
-        if (message.sender === User._id) {
-          return {
-            sender: "You",
-            receiver: user.name,
-            content: message.content,
-          };
-        } else {
-          return {
-            sender: user.name,
-            receiver: "You",
-            content: message.content,
-          };
-        }
+        return {
+          sender: message.sender._id, // Save sender ID from populated field
+          content: message.content,
+        };
       });
       setMessages(messages);
     } catch (error) {
@@ -63,38 +66,52 @@ export default function ChatInterface() {
     }
   };
 
-  // ...
-
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
     if (!User || !User._id) {
       console.error("User is not defined or missing _id");
-      return; // Stop further execution if User._id is not available
+      return;
     }
 
     if (newMessage.trim() && selectedUser) {
       try {
         const messageData = {
-          sender: User._id, // Ensure User._id exists here
+          sender: User._id,
           receiver: selectedUser._id,
           content: newMessage,
         };
 
-        const response = await axios.post(
-          "http://localhost:5000/api/messages",
-          messageData
-        );
+        await axios.post("http://localhost:5000/api/messages", messageData);
 
-        // Add sent message to the message list with correct sender information
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             sender: User._id,
-            receiver: selectedUser._id,
             content: newMessage,
           },
         ]);
+
+        // Update recent chats with the new message
+        setParticipants((prevParticipants) => {
+          const existingParticipantIndex = prevParticipants.findIndex(
+            (p) => p.user._id === selectedUser._id
+          );
+          if (existingParticipantIndex > -1) {
+            const updatedParticipants = [...prevParticipants];
+            updatedParticipants[existingParticipantIndex].content = newMessage;
+            return updatedParticipants;
+          } else {
+            return [
+              ...prevParticipants,
+              {
+                user: selectedUser,
+                content: newMessage,
+              },
+            ];
+          }
+        });
+
         setNewMessage(""); // Clear message input
       } catch (error) {
         console.error("Error sending message:", error);
@@ -168,9 +185,7 @@ export default function ChatInterface() {
                       <ListGroup.Item
                         key={index}
                         className={
-                          msg.sender === User._id
-                            ? "text-end" // Align your messages to the right
-                            : "text-start" // Align their messages to the left
+                          msg.sender === User._id ? "text-end" : "text-start"
                         }
                       >
                         <strong>
