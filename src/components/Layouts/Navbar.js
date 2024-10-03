@@ -166,9 +166,8 @@ export default function Navbar(props) {
           className={`btn btn-${props.mode === "dark" ? "dark" : "light"}`}
           onClick={handleLogout}
         >
-          {/* Always show the icon */}
           <i className="fa-solid fa-right-from-bracket mx-3"></i>
-          {/* Show text only on large screens */}
+
           <span className="d-none d-lg-inline">Logout</span>
         </button>
       </div>

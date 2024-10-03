@@ -67,9 +67,7 @@ export default function Search() {
       {searchResults.length > 0 && (
         <ListGroup>
           {searchResults.map((user) => (
-            <ListGroup.Item key={user._id}>
-              {user.name} - Match Score: {user.matchScore}
-            </ListGroup.Item>
+            <ListGroup.Item key={user._id}>{user.name}</ListGroup.Item>
           ))}
         </ListGroup>
       )}

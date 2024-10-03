@@ -36,14 +36,28 @@ export default function ChatInterface() {
       setLoading(false);
     }
   };
-
   const selectUser = async (user) => {
     setSelectedUser(user);
     try {
       const response = await axios.get(
         `http://localhost:5000/api/messages/${User._id}/${user._id}`
       );
-      setMessages(response.data);
+      const messages = response.data.map((message) => {
+        if (message.sender === User._id) {
+          return {
+            sender: "You",
+            receiver: user.name,
+            content: message.content,
+          };
+        } else {
+          return {
+            sender: user.name,
+            receiver: "You",
+            content: message.content,
+          };
+        }
+      });
+      setMessages(messages);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -72,8 +86,15 @@ export default function ChatInterface() {
           messageData
         );
 
-        // Add sent message to the message list
-        setMessages((prevMessages) => [...prevMessages, response.data]);
+        // Add sent message to the message list with correct sender information
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            sender: User._id,
+            receiver: selectedUser._id,
+            content: newMessage,
+          },
+        ]);
         setNewMessage(""); // Clear message input
       } catch (error) {
         console.error("Error sending message:", error);
