@@ -139,7 +139,6 @@ router.post("/getuser", fetchuser, async (req, res) => {
 });
 
 //Route 4: Update user details using : PUT
-
 router.put("/updateuserdetails/:id", fetchuser, async (req, res) => {
   let success = false;
   const { name, email, oldPassword, newPassword } = req.body;
@@ -168,6 +167,19 @@ router.put("/updateuserdetails/:id", fetchuser, async (req, res) => {
     const newUserDetails = {};
     if (name) {
       newUserDetails.name = name;
+
+      // Generate trigrams for the updated name
+      const generateTrigrams = (str) => {
+        const processedStr = str.toLowerCase();
+        const trigrams = [];
+        for (let i = 0; i < processedStr.length - 2; i++) {
+          trigrams.push(processedStr.slice(i, i + 3));
+        }
+        return trigrams;
+      };
+
+      // Add trigrams to the user details
+      newUserDetails.trigrams = generateTrigrams(name);
     }
     if (email) {
       newUserDetails.email = email;
@@ -177,7 +189,7 @@ router.put("/updateuserdetails/:id", fetchuser, async (req, res) => {
       newUserDetails.password = await bcrypt.hash(newPassword, salt);
     }
 
-    // Update the user details
+    // Update the user details, including the trigrams if the name is updated
     userDetails = await User.findByIdAndUpdate(
       req.params.id,
       { $set: newUserDetails },
