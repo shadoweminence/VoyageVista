@@ -21,9 +21,12 @@ router.get("/:userId", async (req, res) => {
       .sort({ timestamp: -1 }); // Sort by latest message
 
     const latestMessages = {};
+
     messages.forEach((msg) => {
       const otherUser =
-        msg.sender.toString() === userId ? msg.receiver : msg.sender;
+        msg.sender._id.toString() === userId ? msg.receiver : msg.sender;
+
+      // Check if the current message's timestamp is newer than the existing one
       if (
         !latestMessages[otherUser._id] ||
         latestMessages[otherUser._id].timestamp < msg.timestamp
@@ -32,12 +35,14 @@ router.get("/:userId", async (req, res) => {
           user: otherUser,
           content: msg.content,
           timestamp: msg.timestamp,
+          isSentByUser: msg.sender._id.toString() === userId, // Track if the message was sent by the logged-in user
         };
       }
     });
 
     res.send(Object.values(latestMessages));
   } catch (error) {
+    console.error("Error fetching latest messages:", error);
     res.status(500).send({ error: "Unable to retrieve participants" });
   }
 });

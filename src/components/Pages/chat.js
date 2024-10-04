@@ -96,18 +96,33 @@ export default function ChatInterface() {
 
         await axios.post("http://localhost:5000/api/messages", messageData);
 
+        // Update messages in the chat window
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: User._id, content: newMessage, isRead: false }, // Add isRead property
+          { sender: User._id, content: newMessage, isRead: false },
         ]);
 
-        // Mark the message as unread for the receiver only
+        // Update the participants list to show the last message
+        setParticipants((prevParticipants) => {
+          const updatedParticipants = prevParticipants.map((participant) => {
+            if (participant.user._id === selectedUser._id) {
+              return {
+                ...participant,
+                content: newMessage, // Update the last message
+              };
+            }
+            return participant;
+          });
+          return updatedParticipants;
+        });
+
+        setNewMessage(""); // Clear the message input
+
+        // Mark the message as unread for the receiver
         setUnreadMessages((prevUnreadMessages) => ({
           ...prevUnreadMessages,
-          [selectedUser._id]: true, // Only mark the receiver as having an unread message
+          [selectedUser._id]: true, // Mark receiver as having an unread message
         }));
-
-        setNewMessage(""); // Clear message input
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -160,11 +175,9 @@ export default function ChatInterface() {
               onClick={() => selectUser(participant.user)}
             >
               <strong>{participant.user.name}</strong> {/* User name */}
-              <div>{participant.content}</div> {/* Last message content */}
+              <div>{participant.content}</div> {/* Display last message */}
               {unreadMessages[participant.user._id] && (
-                <span className="badge bg-danger ms-2">
-                  {unreadMessages[participant.user._id] ? "1" : "0"}
-                </span>
+                <span className="badge bg-danger ms-2">Unread</span>
               )}
             </ListGroup.Item>
           ))}
