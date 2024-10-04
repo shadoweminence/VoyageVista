@@ -63,4 +63,19 @@ router.get("/:userId/:otherUserId", async (req, res) => {
   }
 });
 
+router.post("/update-unread-messages", async (req, res) => {
+  const { receiverId, senderId } = req.body;
+  try {
+    // Mark the messages as read when the receiver sees them
+    await Message.updateMany(
+      { receiver: receiverId, sender: senderId, isRead: false },
+      { $set: { isRead: true } }
+    );
+    res.send({ message: "Unread messages updated successfully" });
+  } catch (error) {
+    console.error("Error updating unread messages:", error);
+    res.status(500).send({ error: "Failed to update unread messages" });
+  }
+});
+
 module.exports = router;
