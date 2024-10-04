@@ -13,6 +13,7 @@ router.post("/", async (req, res) => {
 // Retrieve all participants with the latest message
 router.get("/:userId", async (req, res) => {
   const userId = req.params.userId;
+
   try {
     const messages = await Message.find({
       $or: [{ sender: userId }, { receiver: userId }],
@@ -31,9 +32,15 @@ router.get("/:userId", async (req, res) => {
         !latestMessages[otherUser._id] ||
         latestMessages[otherUser._id].timestamp < msg.timestamp
       ) {
+        // Format the message content
+        const formattedContent =
+          msg.sender._id.toString() === userId
+            ? `You: ${msg.content}` // Add 'You:' if the user sent the message
+            : msg.content; // Otherwise, just the message
+
         latestMessages[otherUser._id] = {
           user: otherUser,
-          content: msg.content,
+          content: formattedContent, // Use the formatted content
           timestamp: msg.timestamp,
           isSentByUser: msg.sender._id.toString() === userId, // Track if the message was sent by the logged-in user
         };
@@ -65,21 +72,6 @@ router.get("/:userId/:otherUserId", async (req, res) => {
     res
       .status(500)
       .send({ error: "Unable to retrieve messages between users" });
-  }
-});
-
-router.post("/update-unread-messages", async (req, res) => {
-  const { receiverId, senderId } = req.body;
-  try {
-    // Mark the messages as read when the receiver sees them
-    await Message.updateMany(
-      { receiver: receiverId, sender: senderId, isRead: false },
-      { $set: { isRead: true } }
-    );
-    res.send({ message: "Unread messages updated successfully" });
-  } catch (error) {
-    console.error("Error updating unread messages:", error);
-    res.status(500).send({ error: "Failed to update unread messages" });
   }
 });
 

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Form, Button, Card, ListGroup } from "react-bootstrap";
 import axios from "axios";
 import AuthContext from "../../context/Auth/AuthContext";
 
 export default function ChatInterface() {
-  const { auth, User, getUserDetails } = useContext(AuthContext);
+  const { User, getUserDetails } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [participants, setParticipants] = useState([]);
@@ -12,7 +12,9 @@ export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [unreadMessages, setUnreadMessages] = useState({});
+
+  // Reference to the last message
+  const lastMessageRef = useRef(null);
 
   // Fetch participants (users with whom there are messages)
   useEffect(() => {
@@ -27,10 +29,16 @@ export default function ChatInterface() {
         console.error("Error fetching participants:", error);
       }
     };
-
     fetchParticipants();
     getUserDetails();
-  }, [User]);
+  }, [User, getUserDetails]);
+
+  // Scroll to the last message
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]); // Trigger when messages update
 
   // Search users
   const handleSearch = async () => {
@@ -58,26 +66,12 @@ export default function ChatInterface() {
       const response = await axios.get(
         `http://localhost:5000/api/messages/${User._id}/${user._id}`
       );
-      const messages = response.data.map((message) => ({
-        sender: message.sender._id,
-        content: message.content,
-        isRead: message.isRead,
-      }));
-      setMessages(messages);
-
-      // Mark messages as read when the receiver views the conversation
-      if (user._id !== User._id) {
-        setUnreadMessages((prevUnreadMessages) => ({
-          ...prevUnreadMessages,
-          [user._id]: false, // Remove unread status for this user
-        }));
-
-        // Update unread status in the database
-        await axios.post("http://localhost:5000/api/update-unread-messages", {
-          receiverId: User._id,
-          senderId: user._id,
-        });
-      }
+      setMessages(
+        response.data.map((message) => ({
+          sender: message.sender._id,
+          content: message.content,
+        }))
+      );
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -99,30 +93,19 @@ export default function ChatInterface() {
         // Update messages in the chat window
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: User._id, content: newMessage, isRead: false },
+          { sender: User._id, content: newMessage },
         ]);
 
         // Update the participants list to show the last message
-        setParticipants((prevParticipants) => {
-          const updatedParticipants = prevParticipants.map((participant) => {
-            if (participant.user._id === selectedUser._id) {
-              return {
-                ...participant,
-                content: newMessage, // Update the last message
-              };
-            }
-            return participant;
-          });
-          return updatedParticipants;
-        });
+        setParticipants((prevParticipants) =>
+          prevParticipants.map((participant) =>
+            participant.user._id === selectedUser._id
+              ? { ...participant, content: newMessage }
+              : participant
+          )
+        );
 
         setNewMessage(""); // Clear the message input
-
-        // Mark the message as unread for the receiver
-        setUnreadMessages((prevUnreadMessages) => ({
-          ...prevUnreadMessages,
-          [selectedUser._id]: true, // Mark receiver as having an unread message
-        }));
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -176,9 +159,6 @@ export default function ChatInterface() {
             >
               <strong>{participant.user.name}</strong> {/* User name */}
               <div>{participant.content}</div> {/* Display last message */}
-              {unreadMessages[participant.user._id] && (
-                <span className="badge bg-danger ms-2">Unread</span>
-              )}
             </ListGroup.Item>
           ))}
         </ListGroup>
@@ -197,6 +177,9 @@ export default function ChatInterface() {
                     {messages.map((msg, index) => (
                       <ListGroup.Item
                         key={index}
+                        ref={
+                          index === messages.length - 1 ? lastMessageRef : null
+                        } // Set ref to last message
                         className={`${
                           msg.sender === User._id ? "text-end" : "text-start"
                         }`}
