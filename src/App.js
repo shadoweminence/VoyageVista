@@ -8,7 +8,7 @@ import Settings from "./components/Pages/Settings";
 import Packages from "./components/Pages/Packages";
 import AddFeed from "./components/Pages/AddFeed";
 import Home from "./components/Pages/Home";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TourpackState from "./context/tourpack/TourpackState";
 import Profile from "./components/Pages/Profile";
@@ -17,20 +17,11 @@ import AlertProvider from "./context/Alert/AlertProvider";
 import Search from "./components/Pages/Search";
 import AuthProvider from "./context/Auth/AuthProvider";
 import Chat from "./components/Pages/chat";
+import AlertContext from "./context/Alert/alertContext";
 
 function App() {
   const [mode, setMode] = useState("light");
-  const [alert, setAlert] = useState(null);
-
-  const showAlert = (message, type) => {
-    setAlert({
-      msg: message,
-      type: type,
-    });
-    setTimeout(() => {
-      setAlert(null);
-    }, 1500);
-  };
+  const showAlert = useContext(AlertContext);
 
   const toggleMode = () => {
     if (mode === "light") {

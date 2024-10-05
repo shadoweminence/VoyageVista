@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import AuthContext from "../../context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import ImageGallery from "../Layouts/ImageGallery";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -21,9 +22,13 @@ export default function Profile() {
     <>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Profile- Voyage Vista</title>
+        <title>Profile - Voyage Vista</title>
       </Helmet>
-      <div></div>
+      <div>
+        <h1>User Profile</h1>
+        {/* Render the ImageGallery component */}
+        <ImageGallery />
+      </div>
     </>
   );
 }

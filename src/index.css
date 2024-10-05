@@ -43,3 +43,15 @@ code {
   ); /* Adjust the height according to your layout */
   overflow-y: auto; /* Make the container scrollable */
 }
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-item {
+  margin: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
