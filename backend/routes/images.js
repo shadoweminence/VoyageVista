@@ -60,6 +60,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-module.exports = router;
+// Get images by user ID
+router.get("/api/images/:userId", authenticateJWT, async (req, res) => {
+  try {
+    const userId = req.params.userId; // Get the user ID from the route parameters
+    const images = await ImageModel.find({ userId }); // Filter images by user ID
+    res.json(images);
+  } catch (error) {
+    console.error("Error fetching images:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = router;
