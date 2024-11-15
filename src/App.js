@@ -21,7 +21,7 @@ import AlertContext from "./context/Alert/alertContext";
 
 function App() {
   const [mode, setMode] = useState("light");
-  const showAlert = useContext(AlertContext);
+  const { showAlert } = useContext(AlertContext);
 
   const toggleMode = () => {
     if (mode === "light") {

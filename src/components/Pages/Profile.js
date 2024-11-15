@@ -1,101 +1,82 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
-import AuthContext from "../../context/Auth/AuthContext";
-import { useNavigate } from "react-router-dom";
-import ImageGallery from "../Layouts/ImageGallery";
-import axios from "axios";
+import { useParams } from "react-router-dom";
 
-export default function Profile() {
-  const navigate = useNavigate();
-  const { auth } = useContext(AuthContext);
-  const [profilePicture, setProfilePicture] = useState(null);
+import axios from "axios";
+import AuthContext from "../../context/Auth/AuthContext";
+
+const Profile = () => {
+  const { auth, User, getUserDetails } = useContext(AuthContext);
+  const { email: profileEmailFromParams } = useParams(); // Get the profile email from the URL
+  const [profileEmail, setProfileEmail] = useState(null); // To handle both own and other profiles
+  const [isOwner, setIsOwner] = useState(false);
+  const [images, setImages] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      const timer = setTimeout(() => {
-        navigate("/Pages/Login", { replace: true });
-      }, 100);
-
-      return () => clearTimeout(timer);
+    // Fetch the logged-in user's details if they aren't already loaded
+    if (!User) {
+      getUserDetails();
+    } else {
+      // If viewing own profile, set profile email to logged-in user's email
+      if (!profileEmailFromParams || profileEmailFromParams === User.email) {
+        setProfileEmail(User.email);
+        setIsOwner(true); // Viewing own profile
+      } else {
+        setProfileEmail(profileEmailFromParams); // Viewing another user's profile
+        setIsOwner(false);
+      }
     }
-  }, [auth.isAuthenticated, navigate]);
+  }, [User, profileEmailFromParams, getUserDetails]);
 
-  const handleProfilePicChange = async (event) => {
-    const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append("profilePicture", file); // Use the correct key for your API
-
+  // Function to fetch images by email
+  const fetchImages = async (email) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/profile-picture",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // JWT token
-            "Content-Type": "multipart/form-data",
-          },
-        }
+      const response = await axios.get(
+        `http://localhost:5000/api/images/user/${email}`
       );
-      alert(response.data.message);
-      setProfilePicture(response.data.profilePicture); // Update with the profile picture URL
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-      alert("Failed to upload profile picture.");
+
+      if (response.status === 200) {
+        setImages(response.data); // Store images if found
+      } else if (response.status === 404) {
+        setError("No images found for this user.");
+      }
+    } catch (err) {
+      console.error("Error fetching images:", err);
+      setError("Failed to fetch images.");
     }
   };
+  useEffect(() => {
+    if (profileEmail) {
+      fetchImages(profileEmail); // Fetch images for the given user email
+    }
+  }, [profileEmail]);
 
   return (
-    <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Profile - Voyage Vista</title>
-      </Helmet>
-      <div>
-        <h1>User Profile</h1>
+    <div>
+      <h1>{isOwner ? "Your Profile" : `Profile of ${profileEmail}`}</h1>
 
-        {/* Display username if available, else show nothing */}
-        {auth.user && auth.user.username ? (
-          <h2>{auth.user.username}</h2>
-        ) : (
-          <h2></h2> // Empty space instead of "Loading..."
-        )}
-
-        {/* Profile Picture Section */}
-        <div>
-          <label htmlFor="profile-pic" style={{ cursor: "pointer" }}>
-            {profilePicture ? (
-              <img
-                src={profilePicture}
-                alt="Profile"
-                style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "150px",
-                  height: "150px",
-                  borderRadius: "50%",
-                  backgroundColor: "#ccc",
-                }}
-              >
-                <p style={{ textAlign: "center", lineHeight: "150px" }}>
-                  Upload Photo
-                </p>
-              </div>
-            )}
-          </label>
-          <input
-            type="file"
-            id="profile-pic"
-            accept="image/*"
-            style={{ display: "none" }} // Hide the default file input
-            onChange={handleProfilePicChange}
-          />
+      <h2>Image Gallery</h2>
+      {error ? (
+        <p>{error}</p>
+      ) : (
+        <div className="image-gallery">
+          {images.map((image) => (
+            <div key={image._id} className="image-item">
+              <h4>{image.name}</h4>
+              {image.images.map((img, index) => (
+                <img
+                  key={index}
+                  src={`data:${img.contentType};base64,${img.data}`}
+                  alt={`Image ${index + 1}`}
+                  style={{ maxWidth: "200px", margin: "10px" }}
+                />
+              ))}
+            </div>
+          ))}
         </div>
-
-        {/* Render the ImageGallery component */}
-        <ImageGallery />
-      </div>
-    </>
+      )}
+    </div>
   );
-}
+};
+
+export default Profile;
