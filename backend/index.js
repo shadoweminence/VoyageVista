@@ -16,6 +16,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/tourpack", require("./routes/tourpack"));
 app.use("/api/messages", require("./routes/messages"));
 app.use("/api/search", require("./routes/search"));
+app.use("/api/searchPack", require("./routes/searchPack"));
 app.use("/api/images", require("./routes/images"));
 
 const port = 5000;

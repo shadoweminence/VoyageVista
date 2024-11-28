@@ -1,34 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AuthContext from "../../context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Form, Button, ListGroup, Alert } from "react-bootstrap";
+import tourpackContext from "../../context/tourpack/tourContext";
+import AuthContext from "../../context/Auth/AuthContext";
 
 export default function Search() {
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
+  const { tourpacks } = useContext(tourpackContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [error, setError] = useState(""); // To handle errors
   const [loading, setLoading] = useState(false); // To handle loading state
 
-  useEffect(() => {
-    if (!auth.isAuthenticated) {
-      const timer = setTimeout(() => {
-        navigate("/Pages/Login", { replace: true });
-      }, 100);
-
-      return () => clearTimeout(timer);
-    }
-  }, [auth.isAuthenticated, navigate]);
+  const startChatWithAdmin = () => {
+    navigate("/Pages/chat", { state: { contactAdmin: true } });
+  };
+  const LoginRedirect = () => {
+    navigate("/Pages/Login");
+  };
 
   const handleSearch = async () => {
     setLoading(true);
     setError(""); // Reset error state before searching
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/search/search?q=${searchQuery}`
+        `http://localhost:5000/api/searchPack/search?q=${searchQuery}`
       );
       setSearchResults(response.data);
     } catch (error) {
@@ -63,13 +62,40 @@ export default function Search() {
       </Form>
 
       {error && <Alert variant="danger">{error}</Alert>}
-
-      {searchResults.length > 0 && (
-        <ListGroup>
-          {searchResults.map((user) => (
-            <ListGroup.Item key={user._id}>{user.name}</ListGroup.Item>
-          ))}
-        </ListGroup>
+      {auth.isAuthenticated ? (
+        <>
+          {" "}
+          {searchResults.length > 0 && (
+            <ListGroup>
+              {searchResults.map((tourpacks) => (
+                <ListGroup.Item
+                  className="cursor-pointer"
+                  key={tourpacks._id}
+                  onClick={startChatWithAdmin}
+                >
+                  {tourpacks.title}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          )}
+        </>
+      ) : (
+        <>
+          {" "}
+          {searchResults.length > 0 && (
+            <ListGroup>
+              {searchResults.map((tourpacks) => (
+                <ListGroup.Item
+                  key={tourpacks._id}
+                  className="cursor-pointer"
+                  onClick={LoginRedirect}
+                >
+                  {tourpacks.title}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          )}
+        </>
       )}
 
       {searchResults.length === 0 && !loading && !error && (

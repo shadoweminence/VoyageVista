@@ -14,10 +14,6 @@ export default function Navbar(props) {
     navigate("/Pages/Login");
   };
 
-  if (!auth.isAuthenticated) {
-    return null; // Optionally handle unauthenticated users
-  }
-
   const isAdmin = auth.role === "admin"; // Adjust based on your AuthContext setup
 
   return (
@@ -46,102 +42,154 @@ export default function Navbar(props) {
           alignItems: "center", // Center the items horizontally
         }}
       >
-        <ul className="nav flex-column">
-          <li className="nav-item mb-3">
-            <Link
-              className={`nav-link ${isActive("/") ? "active" : ""}`}
-              to="/"
-            >
-              <i className="fa-solid fa-house mx-3"></i>
-              <span className="d-none d-lg-inline">Home</span>
-            </Link>
-          </li>
+        {auth.isAuthenticated ? (
+          <>
+            <ul className="nav flex-column">
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${isActive("/") ? "active" : ""}`}
+                  to="/"
+                >
+                  <i className="fa-solid fa-house mx-3"></i>
+                  <span className="d-none d-lg-inline">Home</span>
+                </Link>
+              </li>
 
-          <li className="nav-item mb-3">
-            <Link
-              className={`nav-link ${
-                isActive("/Pages/Settings") ? "active" : ""
-              }`}
-              to="/Pages/Settings"
-            >
-              <i className="fa-solid fa-gear mx-3"></i>
-              <span className="d-none d-lg-inline">Settings</span>
-            </Link>
-          </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Settings") ? "active" : ""
+                  }`}
+                  to="/Pages/Settings"
+                >
+                  <i className="fa-solid fa-gear mx-3"></i>
+                  <span className="d-none d-lg-inline">Settings</span>
+                </Link>
+              </li>
 
-          <li className="nav-item mb-3">
-            <Link
-              className={`nav-link ${
-                isActive("/Pages/Packages") ? "active" : ""
-              }`}
-              to="/Pages/Packages"
-            >
-              <i className="fa-solid fa-box-open mx-3"></i>
-              <span className="d-none d-lg-inline">Packages</span>
-            </Link>
-          </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Packages") ? "active" : ""
+                  }`}
+                  to="/Pages/Packages"
+                >
+                  <i className="fa-solid fa-box-open mx-3"></i>
+                  <span className="d-none d-lg-inline">Packages</span>
+                </Link>
+              </li>
 
-          <li className="nav-item mb-3">
-            <Link
-              className={`nav-link ${
-                isActive("/Pages/search") ? "active" : ""
-              }`}
-              to="/Pages/search"
-            >
-              <i className="fa-solid fa-magnifying-glass mx-3"></i>
-              <span className="d-none d-lg-inline">Search</span>
-            </Link>
-          </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/search") ? "active" : ""
+                  }`}
+                  to="/Pages/search"
+                >
+                  <i className="fa-solid fa-magnifying-glass mx-3"></i>
+                  <span className="d-none d-lg-inline">Search</span>
+                </Link>
+              </li>
 
-          <li className="nav-item mb-3">
-            <Link
-              className={`nav-link ${
-                isActive("/Pages/addFeed") ? "active" : ""
-              }`}
-              to="/Pages/addFeed"
-            >
-              <i className="fa-solid fa-plus mx-3"></i>
-              <span className="d-none d-lg-inline">AddFeed</span>
-            </Link>
-          </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/addFeed") ? "active" : ""
+                  }`}
+                  to="/Pages/addFeed"
+                >
+                  <i className="fa-solid fa-plus mx-3"></i>
+                  <span className="d-none d-lg-inline">AddFeed</span>
+                </Link>
+              </li>
 
-          <li className="nav-item mb-3">
-            <Link
-              className={`nav-link ${isActive("/Pages/Chat") ? "active" : ""}`}
-              to="/Pages/Chat"
-            >
-              <i className="fa-brands fa-rocketchat mx-3"></i>
-              <span className="d-none d-lg-inline">Chat</span>
-            </Link>
-          </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Chat") ? "active" : ""
+                  }`}
+                  to="/Pages/Chat"
+                >
+                  <i className="fa-brands fa-rocketchat mx-3"></i>
+                  <span className="d-none d-lg-inline">Chat</span>
+                </Link>
+              </li>
 
-          <li className="nav-item mb-3">
-            <Link
-              className={`nav-link ${
-                isActive("/Pages/Profile") ? "active" : ""
-              }`}
-              to="/Pages/Profile"
-            >
-              <i className="fa-solid fa-user mx-3"></i>
-              <span className="d-none d-lg-inline">Profile</span>
-            </Link>
-          </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Profile") ? "active" : ""
+                  }`}
+                  to="/Pages/Profile"
+                >
+                  <i className="fa-solid fa-user mx-3"></i>
+                  <span className="d-none d-lg-inline">Profile</span>
+                </Link>
+              </li>
 
-          {isAdmin && (
-            <li className="nav-item mb-3">
-              <Link
-                className={`nav-link ${
-                  isActive("/Admin/AddPackage") ? "active" : ""
-                }`}
-                to="/Admin/AddPackage"
-              >
-                <i className="fa-solid fa-edit mx-3"></i>
-                <span className="d-none d-lg-inline">Edit Packages</span>
-              </Link>
-            </li>
-          )}
-        </ul>
-
+              {isAdmin && (
+                <li className="nav-item mb-3">
+                  <Link
+                    className={`nav-link ${
+                      isActive("/Admin/AddPackage") ? "active" : ""
+                    }`}
+                    to="/Admin/AddPackage"
+                  >
+                    <i className="fa-solid fa-edit mx-3"></i>
+                    <span className="d-none d-lg-inline">Edit Packages</span>
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </>
+        ) : (
+          <>
+            <ul className="nav flex-column">
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${isActive("/") ? "active" : ""}`}
+                  to="/"
+                >
+                  <i className="fa-solid fa-house mx-3"></i>
+                  <span className="d-none d-lg-inline">Home</span>
+                </Link>
+              </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Packages") ? "active" : ""
+                  }`}
+                  to="/Pages/Packages"
+                >
+                  <i className="fa-solid fa-box-open mx-3"></i>
+                  <span className="d-none d-lg-inline">Packages</span>
+                </Link>
+              </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Search") ? "active" : ""
+                  }`}
+                  to="/Pages/Search"
+                >
+                  <i className="fa-solid fa-magnifying-glass mx-3"></i>
+                  <span className="d-none d-lg-inline">Search</span>
+                </Link>
+              </li>
+              <li className="nav-item mb-3">
+                <Link
+                  className={`nav-link ${
+                    isActive("/Pages/Login") ? "active" : ""
+                  }`}
+                  to="/Pages/Login"
+                >
+                  <i class="fa-solid fa-right-to-bracket mx-3"></i>
+                  <span className="d-none d-lg-inline">Login</span>
+                </Link>
+              </li>
+            </ul>
+          </>
+        )}
         <div
           className={`form-check form-switch mt-3 text-${
             props.mode === "light" ? "dark" : "light"
@@ -161,16 +209,22 @@ export default function Navbar(props) {
         </div>
       </nav>
 
-      <div className="mt-auto">
-        <button
-          className={`btn btn-${props.mode === "dark" ? "dark" : "light"}`}
-          onClick={handleLogout}
-        >
-          <i className="fa-solid fa-right-from-bracket mx-3"></i>
+      {auth.isAuthenticated ? (
+        <>
+          <div className="mt-auto">
+            <button
+              className={`btn btn-${props.mode === "dark" ? "dark" : "light"}`}
+              onClick={handleLogout}
+            >
+              <i className="fa-solid fa-right-from-bracket mx-3"></i>
 
-          <span className="d-none d-lg-inline">Logout</span>
-        </button>
-      </div>
+              <span className="d-none d-lg-inline">Logout</span>
+            </button>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

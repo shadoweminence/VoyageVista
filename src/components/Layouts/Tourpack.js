@@ -8,12 +8,9 @@ const Tourpack = () => {
   let navigate = useNavigate();
   const context = useContext(tourpackContext);
   const { tourpacks, getTourpacks } = context;
+
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      getTourpacks();
-    } else {
-      navigate("/");
-    }
+    getTourpacks();
 
     // eslint-disable-next-line
   }, []);
@@ -30,6 +27,7 @@ const Tourpack = () => {
     </>
   );
 };
+
 const EditPack = () => {
   const context = useContext(tourpackContext);
   const { tourpacks, getTourpacks, editTourpack } = context;

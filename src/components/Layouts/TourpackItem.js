@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/Auth/AuthContext";
+import AlertContext from "../../context/Alert/alertContext";
 
 const TourpackItem = (props) => {
   const { tourpack } = props;
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
+  const { showAlert } = useContext(AlertContext);
 
   // Split the description text into paragraphs based on line breaks
   const paragraphs = tourpack.description.split(/\r?\n/);
 
   const startChatWithAdmin = () => {
     navigate("/Pages/chat", { state: { contactAdmin: true } });
+  };
+  const LoginRedirect = () => {
+    navigate("/Pages/Login");
   };
   return (
     <>
@@ -25,7 +32,16 @@ const TourpackItem = (props) => {
               </p>
             ))}
             <p className="card-text">{tourpack.pic}</p>
-            <button onClick={startChatWithAdmin}>Contact Us</button>
+            {auth.isAuthenticated ? (
+              <>
+                {" "}
+                <button onClick={startChatWithAdmin}>Contact Us</button>
+              </>
+            ) : (
+              <>
+                <button onClick={LoginRedirect}>Contact Us</button>
+              </>
+            )}
           </div>
         </div>
       </div>

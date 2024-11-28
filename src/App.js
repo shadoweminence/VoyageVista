@@ -18,6 +18,7 @@ import Search from "./components/Pages/Search";
 import AuthProvider from "./context/Auth/AuthProvider";
 import Chat from "./components/Pages/chat";
 import AlertContext from "./context/Alert/alertContext";
+import { Tourpack } from "./components/Layouts/Tourpack";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -59,6 +60,8 @@ function App() {
                     element={<Chat userId="some User Id" />}
                   />
                   <Route path="/Pages/settings" element={<Settings />} />
+                  <Route path="/Layouts/Tourpack" element={<Tourpack />} />
+
                   <Route path="/Pages/packages" element={<Packages />} />
                   <Route path="/Pages/addFeed" element={<AddFeed />} />
                   <Route path="/Pages/Profile" element={<Profile />} />

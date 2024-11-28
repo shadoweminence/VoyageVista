@@ -55,3 +55,12 @@ code {
   padding: 10px;
   border-radius: 5px;
 }
+
+/* backgrtoud image in home */
+.bg-image {
+  background-image: url("components/images/kagbeni.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 80vh; /* Full viewport height */
+}
