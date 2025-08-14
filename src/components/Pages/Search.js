@@ -40,6 +40,7 @@ export default function Search() {
       setLoading(false);
     }
   };
+  console.log(searchResults,"search")
 
   return (
     <div>
@@ -71,7 +72,7 @@ export default function Search() {
                 <ListGroup.Item
                   className="cursor-pointer"
                   key={tourpacks._id}
-                  onClick={startChatWithAdmin}
+                  onClick={() => navigate(`/Pages/Packages/${tourpacks._id}`)}
                 >
                   {tourpacks.title}
                 </ListGroup.Item>

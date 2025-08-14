@@ -62,7 +62,7 @@ function App() {
                   <Route path="/Pages/settings" element={<Settings />} />
                   <Route path="/Layouts/Tourpack" element={<Tourpack />} />
 
-                  <Route path="/Pages/packages" element={<Packages />} />
+                  <Route path="/Pages/packages/:id" element={<Packages />} />
                   <Route path="/Pages/addFeed" element={<AddFeed />} />
                   <Route path="/Pages/Profile" element={<Profile />} />
                   <Route path="/Pages/register" element={<Register />} />

@@ -1,30 +1,33 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TourpackItem from "./TourpackItem";
 import tourpackContext from "../../context/tourpack/tourContext";
 import EditPackage from "../Admin/EditPackage";
 
 const Tourpack = () => {
-  let navigate = useNavigate();
   const context = useContext(tourpackContext);
   const { tourpacks, getTourpacks } = context;
-
+  const { id } = useParams(); 
   useEffect(() => {
     getTourpacks();
 
     // eslint-disable-next-line
   }, []);
 
+  const filteredTourpacks = id
+  ? tourpacks.filter((tp) => tp._id === id)
+  : tourpacks;
   return (
-    <>
-      <div className="container my-3">
-        <h2 className="text-center">Available Packages</h2>
-
-        {tourpacks.map((tourpack) => {
-          return <TourpackItem key={tourpack._id} tourpack={tourpack} />;
-        })}
-      </div>
-    </>
+    <div className="container my-3">
+      <h2 className="text-center">Available Packages</h2>
+      {filteredTourpacks.length > 0 ? (
+        filteredTourpacks.map((tourpack) => (
+          <TourpackItem key={tourpack._id} tourpack={tourpack} />
+        ))
+      ) : (
+        <p>No package found.</p>
+      )}
+    </div>
   );
 };
 
